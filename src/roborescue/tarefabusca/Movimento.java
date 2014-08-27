@@ -112,7 +112,7 @@ public class Movimento {
         }
 
 
-        // Anda em em frente e executa a ação
+        // Anda em em frente e executa a ação ...
         rescuer.ahead(TAMANHO_CELULA);
         rescuer.execute();
     }
