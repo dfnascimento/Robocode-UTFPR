@@ -17,127 +17,176 @@ import roborescue.astar.Position;
  */
 public class AcoesProibidas {
 
-    /**
-     * Verifica quais posições estão ocupadas por inimigos e as retorna em uma
-     * lista de ações.
-     *
-     * @param estadoAtual
-     * @param inimigos
-     * @return acoesProibidas
-     */
-    public List<Action> getAcoesProibidas(Position estadoAtual, List<Position> inimigos) {
-        List<Action> acoesProibidas = new ArrayList<>();
+	private Action direcao;
 
-        for (Position inimigo : inimigos) {
-            if ((inimigo.getY() < estadoAtual.getY()
-                    + 240.0 && inimigo.getY() > estadoAtual.getY() - 240.0)) {
-                if ((estadoAtual.getX() <= inimigo.getX()) && estadoAtual.getX()
-                        + 240.0 > inimigo.getX()) {
-                    acoesProibidas.addAll(getAcoesProibidasFrente(estadoAtual, inimigo));
-                }
-                if ((estadoAtual.getX() - 120.0 <= inimigo.getX()) && estadoAtual.getX()
-                        + 120.0 > inimigo.getX()) {
-                    acoesProibidas.addAll(getAcoesProibidasParalelo(estadoAtual, inimigo));
-                }
-                if ((estadoAtual.getX() >= inimigo.getX()) && estadoAtual.getX()
-                        - 240.0 < inimigo.getX()) {
-                    acoesProibidas.addAll(getAcoesProibidasAtras(estadoAtual, inimigo));
-                }
-            }
-        }
+	public AcoesProibidas(Action direcao) throws Exception {
+		this.direcao = direcao;
 
-        return acoesProibidas;
-    }
+		if (direcao != Action.OESTE && direcao != Action.LESTE) {
+			throw new Exception("Direção de campo inválida!");
+		}
+	}
 
-    /**
-     * Retorna quais posições nas celulas frontais estão ocupadas por inimigos.
-     *
-     * @param estadoAtual
-     * @param inimigo
-     * @return acoesProibidas
-     */
-    private List<Action> getAcoesProibidasFrente(Position estadoAtual, Position inimigo) {
-        List<Action> acoesProibidas = new ArrayList<>();
+	/**
+	 * Verifica quais posições estão ocupadas por inimigos e as retorna em uma
+	 * lista de ações.
+	 *
+	 * @param estadoAtual
+	 * @param inimigos
+	 * @return acoesProibidas
+	 */
+	public List<Action> getAcoesProibidas(Position estadoAtual,
+			List<Position> inimigos) {
+		List<Action> acoesProibidas = new ArrayList<>();
 
-        if ((estadoAtual.getY() + 120.0 <= inimigo.getY()) && (estadoAtual.getY()
-                + 240.0 > inimigo.getY()) && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.NORDESTE);
-        } else if ((estadoAtual.getY() < inimigo.getY()) && (estadoAtual.getY()
-                + 120.0 > inimigo.getY() && (inimigo.getX() != estadoAtual.getX()))) {
-            acoesProibidas.add(Action.NORDESTE);
-            acoesProibidas.add(Action.LESTE);
-        } else if (estadoAtual.getY() == inimigo.getY()) {
-            acoesProibidas.add(Action.LESTE);
-        } else if (estadoAtual.getY() > inimigo.getY() && estadoAtual.getY()
-                - 120.0 < inimigo.getY() && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.LESTE);
-            acoesProibidas.add(Action.SUDESTE);
-        } else if (estadoAtual.getY() - 120.0 >= inimigo.getY() && estadoAtual.getY()
-                - 240.0 < inimigo.getY() && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.SUDESTE);
-        }
+		if (direcao == Action.LESTE) {
+			for (Position inimigo : inimigos) {
+				if ((inimigo.getY() < estadoAtual.getY() + 240.0 && inimigo
+						.getY() > estadoAtual.getY() - 240.0)) {
+					if ((estadoAtual.getX() <= inimigo.getX())
+							&& estadoAtual.getX() + 240.0 > inimigo.getX()) {
+						acoesProibidas.addAll(getAcoesProibidasFrente(
+								estadoAtual, inimigo));
+					}
+					if ((estadoAtual.getX() - 120.0 <= inimigo.getX())
+							&& estadoAtual.getX() + 120.0 > inimigo.getX()) {
+						acoesProibidas.addAll(getAcoesProibidasParalelo(
+								estadoAtual, inimigo));
+					}
+					if ((estadoAtual.getX() >= inimigo.getX())
+							&& estadoAtual.getX() - 240.0 < inimigo.getX()) {
+						acoesProibidas.addAll(getAcoesProibidasAtras(
+								estadoAtual, inimigo));
+					}
+				}
+			}
+		} else {
+			for (Position inimigo : inimigos) {
+				if ((inimigo.getY() < estadoAtual.getY() + 240.0 && inimigo
+						.getY() > estadoAtual.getY() - 240.0)) {
+					if ((estadoAtual.getX() >= inimigo.getX())
+							&& estadoAtual.getX() - 240.0 < inimigo.getX()) {
+						acoesProibidas.addAll(getAcoesProibidasAtras(
+								estadoAtual, inimigo));
+					}
+					if ((estadoAtual.getX() + 120.0 >= inimigo.getX())
+							&& estadoAtual.getX() - 120.0 < inimigo.getX()) {
+						acoesProibidas.addAll(getAcoesProibidasParalelo(
+								estadoAtual, inimigo));
+					}
+					if ((inimigo.getX() >= estadoAtual.getX())
+							&& estadoAtual.getX() > inimigo.getX() + 240) {
+						acoesProibidas.addAll(getAcoesProibidasFrente(
+								estadoAtual, inimigo));
+					}
+				}
+				
+			}
+		}
 
-        return acoesProibidas;
-    }
+		return acoesProibidas;
+	}
 
-    /**
-     * Retorna quais posições nas celulas paralelas estão ocupadas por inimigos.
-     *
-     * @param estadoAtual
-     * @param inimigo
-     * @return acoesProibidas
-     */
-    private List<Action> getAcoesProibidasParalelo(Position estadoAtual, Position inimigo) {
-        List<Action> acoesProibidas = new ArrayList<>();
+	/**
+	 * Retorna quais posições nas celulas frontais estão ocupadas por inimigos.
+	 *
+	 * @param estadoAtual
+	 * @param inimigo
+	 * @return acoesProibidas
+	 */
+	private List<Action> getAcoesProibidasFrente(Position estadoAtual,
+			Position inimigo) {
+		List<Action> acoesProibidas = new ArrayList<>();
 
-        if ((estadoAtual.getY() + 120.0 <= inimigo.getY()) && (estadoAtual.getY()
-                + 240.0 > inimigo.getY())) {
-            acoesProibidas.add(Action.NORTE);
-        } else if ((estadoAtual.getY() < inimigo.getY()) && (estadoAtual.getY()
-                + 120.0 > estadoAtual.getY())) {
-            acoesProibidas.add(Action.NORTE);
-            // Neste caso o inimigo está emcima do rescuer, situação impossível   
-            //        } else if (estadoAtual.getY() == inimigo.getY()) {
-            //            acoesProibidas.add(Action.NORTE);
-        } else if (estadoAtual.getY() > inimigo.getY() && estadoAtual.getY()
-                - 120.0 < inimigo.getY()) {
-            acoesProibidas.add(Action.SUL);
-        } else if (estadoAtual.getY() - 120.0 >= inimigo.getY() && estadoAtual.getY()
-                - 240.0 < inimigo.getY()) {
-            acoesProibidas.add(Action.SUL);
-        }
+		if ((estadoAtual.getY() + 120.0 <= inimigo.getY())
+				&& (estadoAtual.getY() + 240.0 > inimigo.getY())
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.NORDESTE);
+		} else if ((estadoAtual.getY() < inimigo.getY())
+				&& (estadoAtual.getY() + 120.0 > inimigo.getY() && (inimigo
+						.getX() != estadoAtual.getX()))) {
+			acoesProibidas.add(Action.NORDESTE);
+			acoesProibidas.add(Action.LESTE);
+		} else if (estadoAtual.getY() == inimigo.getY()) {
+			acoesProibidas.add(Action.LESTE);
+		} else if (estadoAtual.getY() > inimigo.getY()
+				&& estadoAtual.getY() - 120.0 < inimigo.getY()
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.LESTE);
+			acoesProibidas.add(Action.SUDESTE);
+		} else if (estadoAtual.getY() - 120.0 >= inimigo.getY()
+				&& estadoAtual.getY() - 240.0 < inimigo.getY()
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.SUDESTE);
+		}
 
-        return acoesProibidas;
-    }
+		return acoesProibidas;
+	}
 
-    /**
-     * Retorna quais posições nas celulas traseiras estão ocupadas por inimigos.
-     *
-     * @param estadoAtual
-     * @param inimigo
-     * @return acoesProibidas
-     */
-    private List<Action> getAcoesProibidasAtras(Position estadoAtual, Position inimigo) {
-        List<Action> acoesProibidas = new ArrayList<>();
+	/**
+	 * Retorna quais posições nas celulas paralelas estão ocupadas por inimigos.
+	 *
+	 * @param estadoAtual
+	 * @param inimigo
+	 * @return acoesProibidas
+	 */
+	private List<Action> getAcoesProibidasParalelo(Position estadoAtual,
+			Position inimigo) {
+		List<Action> acoesProibidas = new ArrayList<>();
 
-        if ((estadoAtual.getY() + 120.0 <= inimigo.getY()) && (estadoAtual.getY()
-                + 240.0 > inimigo.getY()) && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.NOROESTE);
-        } else if ((estadoAtual.getY() < inimigo.getY()) && (estadoAtual.getY()
-                + 120.0 > estadoAtual.getY()) && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.NOROESTE);
-            acoesProibidas.add(Action.OESTE);
-        } else if (estadoAtual.getY() == inimigo.getY()) {
-            acoesProibidas.add(Action.OESTE);
-        } else if (estadoAtual.getY() > inimigo.getY() && estadoAtual.getY()
-                - 120.0 < inimigo.getY()&& (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.SUDOESTE);
-            acoesProibidas.add(Action.OESTE);
-        } else if (estadoAtual.getY() - 120.0 >= inimigo.getY() && estadoAtual.getY()
-                - 240.0 < inimigo.getY() && (inimigo.getX() != estadoAtual.getX())) {
-            acoesProibidas.add(Action.SUDOESTE);
-        }
+		if ((estadoAtual.getY() + 120.0 <= inimigo.getY())
+				&& (estadoAtual.getY() + 240.0 > inimigo.getY())) {
+			acoesProibidas.add(Action.NORTE);
+		} else if ((estadoAtual.getY() < inimigo.getY())
+				&& (estadoAtual.getY() + 120.0 > estadoAtual.getY())) {
+			acoesProibidas.add(Action.NORTE);
+			// Neste caso o inimigo está emcima do rescuer, situação impossível
+			// } else if (estadoAtual.getY() == inimigo.getY()) {
+			// acoesProibidas.add(Action.NORTE);
+		} else if (estadoAtual.getY() > inimigo.getY()
+				&& estadoAtual.getY() - 120.0 < inimigo.getY()) {
+			acoesProibidas.add(Action.SUL);
+		} else if (estadoAtual.getY() - 120.0 >= inimigo.getY()
+				&& estadoAtual.getY() - 240.0 < inimigo.getY()) {
+			acoesProibidas.add(Action.SUL);
+		}
 
-        return acoesProibidas;
-    }
+		return acoesProibidas;
+	}
+
+	/**
+	 * Retorna quais posições nas celulas traseiras estão ocupadas por inimigos.
+	 *
+	 * @param estadoAtual
+	 * @param inimigo
+	 * @return acoesProibidas
+	 */
+	private List<Action> getAcoesProibidasAtras(Position estadoAtual,
+			Position inimigo) {
+		List<Action> acoesProibidas = new ArrayList<>();
+
+		if ((estadoAtual.getY() + 120.0 <= inimigo.getY())
+				&& (estadoAtual.getY() + 240.0 > inimigo.getY())
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.NOROESTE);
+		} else if ((estadoAtual.getY() < inimigo.getY())
+				&& (estadoAtual.getY() + 120.0 > estadoAtual.getY())
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.NOROESTE);
+			acoesProibidas.add(Action.OESTE);
+		} else if (estadoAtual.getY() == inimigo.getY()) {
+			acoesProibidas.add(Action.OESTE);
+		} else if (estadoAtual.getY() > inimigo.getY()
+				&& estadoAtual.getY() - 120.0 < inimigo.getY()
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.SUDOESTE);
+			acoesProibidas.add(Action.OESTE);
+		} else if (estadoAtual.getY() - 120.0 >= inimigo.getY()
+				&& estadoAtual.getY() - 240.0 < inimigo.getY()
+				&& (inimigo.getX() != estadoAtual.getX())) {
+			acoesProibidas.add(Action.SUDOESTE);
+		}
+
+		return acoesProibidas;
+	}
 }

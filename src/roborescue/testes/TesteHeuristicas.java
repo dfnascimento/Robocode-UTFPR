@@ -16,7 +16,7 @@ import roborescue.astar.Position;
 public class TesteHeuristicas {
 
     public static void main(String[] args) {
-        AStarImpl alg = new AStarImpl(new Position(2406.0, 750.0), null);
+        AStarImpl alg = new AStarImpl(new Position(2406.0, 750.0), null, Action.LESTE);
         try {
             double h = alg.getCustoEstimado(new Position(200.0, 600.0), Action.LESTE);
             System.out.println("LESTE: " + h);

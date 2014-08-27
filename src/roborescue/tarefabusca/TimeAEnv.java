@@ -62,11 +62,6 @@ public class TimeAEnv extends RoborescueEnv {
      */
     private Movimento movimento;
     
-    /**
-     * Direção da base do time 
-     */
-    private Action base;
-    
     //Para inicializacoes necessarias
     @Override
     public void setup() {
@@ -140,7 +135,7 @@ public class TimeAEnv extends RoborescueEnv {
                 inimigos.add(posicaoInimigo);
             }
             
-            aEstrela = new AStarImpl(new Position(xRefem, yRefem), inimigos);
+            aEstrela = new AStarImpl(new Position(xRefem, yRefem), inimigos, ultimaAcao);
             
         } catch (RemoteException ex) {
             System.out.println("Falha ao pegar server reference - setup " + myTeam);

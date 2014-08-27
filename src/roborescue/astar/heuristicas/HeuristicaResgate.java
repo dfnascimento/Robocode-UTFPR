@@ -3,6 +3,7 @@
  */
 package roborescue.astar.heuristicas;
 
+import roborescue.astar.Action;
 import roborescue.astar.Position;
 
 /**
@@ -26,9 +27,28 @@ public class HeuristicaResgate implements Heuristica {
 			TAMANHO_CELULA, 2) + Math.pow(TAMANHO_CELULA, 2));
 
 	private Position estadoObjetivo;
-	
+
+	private Action direcao;
+
+	/**
+	 * Assume que a direção do robô é Leste.
+	 * 
+	 * @param estadoObjetivo
+	 */
 	public HeuristicaResgate(Position estadoObjetivo) {
 		this.estadoObjetivo = estadoObjetivo;
+		direcao = Action.LESTE;
+	}
+
+	/**
+	 * Define a direção do robô.
+	 * 
+	 * @param estadoObjetivo
+	 * @param direcao
+	 */
+	public HeuristicaResgate(Position estadoObjetivo, Action direcao) {
+		this.estadoObjetivo = estadoObjetivo;
+		this.direcao = direcao;
 	}
 
 	/*
@@ -41,12 +61,13 @@ public class HeuristicaResgate implements Heuristica {
 	@Override
 	public double getHeuristica(Position estadoPretendido) {
 		double distY;
-		double distX;
+		double distX = 0;
 		double diagonal = 0;
 
-		// Limpeza de sinal
-		if (Math.sqrt(Math.pow(estadoObjetivo.getX() - estadoPretendido.getX(), 2)) > 
-			Math.sqrt(Math.pow(estadoObjetivo.getY() - estadoPretendido.getY(), 2))) {
+		// FIXME utilizar e testar com Math.abs
+		if (Math.sqrt(Math.pow(estadoObjetivo.getX() - estadoPretendido.getX(),
+				2)) > Math.sqrt(Math.pow(estadoObjetivo.getY()
+				- estadoPretendido.getY(), 2))) {
 			// 1 - Calcular a distância em Y
 			if (estadoPretendido.getY() < (estadoObjetivo.getY() + TAMANHO_CELULA / 2)
 					&& estadoPretendido.getY() > (estadoObjetivo.getY() - TAMANHO_CELULA / 2)) {
@@ -59,15 +80,27 @@ public class HeuristicaResgate implements Heuristica {
 				distY = estadoPretendido.getY() - estadoObjetivo.getY();
 			}
 
-			// 2 - Calcular a distancia em X
-			if (estadoPretendido.getX() < (estadoObjetivo.getX() + TAMANHO_CELULA / 2)
-					&& estadoPretendido.getX() > (estadoObjetivo.getX() - TAMANHO_CELULA / 2)) {
-				distX = 0;
-			} else if (estadoPretendido.getX() < estadoObjetivo.getX()) {
-				// Não está no mesmo nó
-				distX = estadoObjetivo.getX() - estadoPretendido.getX();
-			} else {
-				distX = estadoPretendido.getX() - estadoObjetivo.getX();
+			if (direcao == Action.LESTE) {
+				// 2 - Calcular a distancia em X
+				if (estadoPretendido.getX() < (estadoObjetivo.getX() + TAMANHO_CELULA / 2)
+						&& estadoPretendido.getX() > (estadoObjetivo.getX() - TAMANHO_CELULA / 2)) {
+					distX = 0;
+				} else if (estadoPretendido.getX() < estadoObjetivo.getX()) {
+					// Não está no mesmo nó
+					distX = estadoObjetivo.getX() - estadoPretendido.getX();
+				} else {
+					distX = estadoPretendido.getX() - estadoObjetivo.getX();
+				}
+			} else if (direcao == Action.OESTE) {
+				if (estadoPretendido.getX() < (estadoObjetivo.getX() + TAMANHO_CELULA / 2)
+						&& estadoPretendido.getX() > (estadoObjetivo.getX() - TAMANHO_CELULA / 2)) {
+					distX = 0;
+				} else if (estadoPretendido.getX() > estadoObjetivo.getX()) {
+					// Não está no mesmo nó
+					distX = estadoPretendido.getX() - estadoObjetivo.getX();
+				} else {
+					distX = estadoObjetivo.getX() - estadoPretendido.getX();
+				}
 			}
 
 			int celulasCatetos = 0;

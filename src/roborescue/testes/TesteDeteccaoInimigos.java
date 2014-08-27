@@ -7,6 +7,7 @@ package roborescue.testes;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import roborescue.astar.Action;
 import roborescue.astar.Position;
 import roborescue.tarefabusca.AcoesProibidas;
@@ -52,7 +53,13 @@ public class TesteDeteccaoInimigos {
 //        listaInimigos.add(leste);
 //        listaInimigos.add(oeste);
         
-        AcoesProibidas utils = new AcoesProibidas();
+        AcoesProibidas utils = null;
+		try {
+			utils = new AcoesProibidas(Action.LESTE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         List<Action> acoesProibidas = utils.getAcoesProibidas(rescuer, listaInimigos);
 

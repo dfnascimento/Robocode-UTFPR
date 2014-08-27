@@ -59,14 +59,18 @@ public class AStarImpl implements AStar {
 	 * @param estadoObjetivo
 	 * @param inimigos
 	 */
-	public AStarImpl(Position estadoObjetivo, List<Position> inimigos) {
+	public AStarImpl(Position estadoObjetivo, List<Position> inimigos, Action direcao) {
 		this.estadoObjetivo = estadoObjetivo;
 		this.inimigos = inimigos;
 
 		custoTotal = 0;
-		celulasInimigos = new AcoesProibidas();
+		try {
+			celulasInimigos = new AcoesProibidas(direcao);
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+		}
 
-		heuristica = new HeuristicaResgate(estadoObjetivo);
+		heuristica = new HeuristicaResgate(estadoObjetivo, direcao);
 	}
 
 	/**
@@ -83,7 +87,12 @@ public class AStarImpl implements AStar {
 		this.inimigos = inimigos;
 
 		custoTotal = 0;
-		celulasInimigos = new AcoesProibidas();
+		
+		try {
+			celulasInimigos = new AcoesProibidas(Action.LESTE);
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+		}
 
 		if (isRescue) {
 			heuristica = new HeuristicaResgate(estadoObjetivo);
@@ -113,12 +122,17 @@ public class AStarImpl implements AStar {
 						&& getCustoEstimado(estadoAtual, a) <= menorCusto) {
 					menorCusto = getCustoEstimado(estadoAtual, a);
 					acao = a;
+					
+					System.out.println(a.toString()+ " - " + menorCusto);
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				System.err.println("Pulando esta ação.");
 			}
 		}
+		
+		System.out.println("Escolhida: " + acao.toString());
+		
 		custoTotal += menorCusto;
 		return acao;
 	}
