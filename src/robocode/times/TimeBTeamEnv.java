@@ -85,7 +85,7 @@ public class TimeBTeamEnv extends RoborescueEnv {
     
     public static void main(String[] args) {
         TimeBTeamEnv team = new TimeBTeamEnv();
-        team.init(new String[]{"TimeB", "localhost"});
+        team.init(new String[]{"Enemy", "localhost"});
         team.setup();
         while(true) {
           try {
