@@ -45,7 +45,7 @@ public class TimeBTeamEnv extends RoborescueEnv {
         double yRefem = refem.getY();
         RMIRobotInterface[] teamRef = getTeamRef();
 
-/*        for (int robo = 1; robo < numRobos; robo++) {            
+        for (int robo = 1; robo < numRobos; robo++) {            
             
             if (xRefem < robos[robo].getX() && yRefem > robos[robo].getY()) {
                 teamRef[robo].turnRight(1.0);
@@ -69,7 +69,7 @@ public class TimeBTeamEnv extends RoborescueEnv {
             
             teamRef[robo].execute();
 
-        }*/
+        }
 
     }
     

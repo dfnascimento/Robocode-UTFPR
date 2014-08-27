@@ -57,6 +57,8 @@ public class TimeAEnv extends RoborescueEnv {
     double xRefem;
     double yRefem;
 
+    private Position ultimaPosicao;
+    
     /**
      * Movimento do robo
      */
@@ -71,7 +73,7 @@ public class TimeAEnv extends RoborescueEnv {
 
     void setInitialPosition() {
         movimento = new Movimento();
-        
+        ultimaPosicao = new Position(0, 0);
         try {
             System.out.println("*** TAMANHO DO CAMPO ***");
             System.out.println("Battle field Width  = " + getServerRef().getBattlefieldWidth());
@@ -87,7 +89,9 @@ public class TimeAEnv extends RoborescueEnv {
             // Nao mude a posicao do refem - dah pau
             hostage = myRobots[0];
             xRefem = hostage.getX();
-            ;yRefem = hostage.getY();
+            yRefem = hostage.getY();
+            
+            
             System.out.println(myTeam + ": pos robo a ser buscado X="
                     + xRefem + " Y=" + yRefem);
 
@@ -98,9 +102,13 @@ public class TimeAEnv extends RoborescueEnv {
             
             double xRescuer = rescuer.getX();
             double yRescuer = rescuer.getY();
+            ultimaPosicao = new Position(rescuer.getX() , rescuer.getY());
+            
             System.out.println(myTeam + ": pos robo salvador  X="
                     + xRescuer + " Y=" + yRescuer);
 
+            
+            
             // TO DO - posicionar os robos aleatoriamente para o A* ou em
             // em posicoes fixas quando for testar sucessivas vezes
             // Abaixo, exemplo de posicionamento fixo
@@ -190,7 +198,9 @@ public class TimeAEnv extends RoborescueEnv {
         
         aEstrela.setInimigos(inimigosUpdate);
 
-        Action acaoPretendida = aEstrela.move(new Position(myRobots[1].getX(), myRobots[1].getY()));
+        ultimaPosicao = new Position(myRobots[1].getX(), myRobots[1].getY());
+        
+        Action acaoPretendida = aEstrela.move(ultimaPosicao);
         
         movimento.mover(teamRef[1], acaoPretendida, ultimaAcao);
         

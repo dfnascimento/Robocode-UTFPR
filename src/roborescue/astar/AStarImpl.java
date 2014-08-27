@@ -48,10 +48,14 @@ public class AStarImpl implements AStar {
 
 	private double custoTotal;
 
+	private Action acao;
+	
 	/**
 	 * Escolhe as posições.
 	 */
 	private AcoesProibidas celulasInimigos;
+	
+	private Position ultimaPosicao;
 
 	/**
 	 * Construtora padrão, a heurística usada é a de resgate
@@ -62,7 +66,8 @@ public class AStarImpl implements AStar {
 	public AStarImpl(Position estadoObjetivo, List<Position> inimigos, Action direcao) {
 		this.estadoObjetivo = estadoObjetivo;
 		this.inimigos = inimigos;
-
+		this.ultimaPosicao = new Position(0, 0);
+		
 		custoTotal = 0;
 		try {
 			celulasInimigos = new AcoesProibidas(direcao);
@@ -85,7 +90,8 @@ public class AStarImpl implements AStar {
 			boolean isRescue) {
 		this.estadoObjetivo = estadoObjetivo;
 		this.inimigos = inimigos;
-
+		this.ultimaPosicao = new Position(0, 0);
+		
 		custoTotal = 0;
 		
 		try {
@@ -109,11 +115,17 @@ public class AStarImpl implements AStar {
 	 */
 	@Override
 	public Action move(Position estadoAtual) {
-
 		List<Action> acoesProibidas = celulasInimigos.getAcoesProibidas(
 				estadoAtual, inimigos);
 
+		// Verifica se está "travado" em uma parede
+		if (estadoAtual.getX() == ultimaPosicao.getX() 
+				&& estadoAtual.getX() == ultimaPosicao.getX()) {
+			acoesProibidas.add(acao);
+		}
+		
 		double menorCusto = 3000;
+		
 		Action acao = null;
 
 		for (Action a : Action.values()) {
