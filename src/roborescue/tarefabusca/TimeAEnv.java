@@ -129,7 +129,7 @@ public class TimeAEnv extends RoborescueEnv {
             enemyRobots = new RobotInfo[robotQty];
             // observar que o arg eh o proprio nome do time para impedir trapacas
             enemyRobots = getServerRef().getEnemyTeamInfo(myTeam);
-            ultimaAcao = Action.OESTE;
+            ultimaAcao = Action.LESTE;
             inimigos = new ArrayList<Position>();
 
             System.out.println("*** Inimigos de " + myTeam + " ***");
