@@ -74,7 +74,7 @@ public class Movimento {
     private void moverNorte(RMIRobotInterface rescuer, Action ultimaAcao)
             throws RemoteException {
         // Faz posicionamento
-        switch (ultimaAcao) {
+        /*switch (ultimaAcao) {
             case NORTE:
                 // Não faz nada, já está posicionado
                 break;
@@ -99,7 +99,18 @@ public class Movimento {
             case NOROESTE:
                 rescuer.setTurnRight(45);
                 break;
+        }*/
+    	
+        if (rescuer.getRobotInfo().getHeading() > 180) {
+            Double degree = (0 - rescuer.getRobotInfo().getHeading() + 360) % 360;
+
+            rescuer.turnRight(degree);
+        } else if (rescuer.getRobotInfo().getHeading() != 0) {
+            Double degree = (rescuer.getRobotInfo().getHeading() + 360) % 360;
+
+            rescuer.turnLeft(degree);
         }
+
 
         // Anda em em frente e executa a ação
         rescuer.ahead(TAMANHO_CELULA);
